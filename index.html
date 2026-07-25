@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Literacy Mini-Games</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-left">
+            <button id="home-btn" onclick="showScreen('home-screen')">🏠 Home</button>
+            <h1 id="app-title">Tech Literacy Arcade</h1>
+        </div>
+
+        <div class="lang-selector">
+            <label for="lang-select">🌐</label>
+            <select id="lang-select" onchange="changeLanguage(this.value)">
+                <option value="en" selected>English</option>
+                <option value="es">Español</option>
+                <option value="zh">中文 (Mandarin)</option>
+                <option value="ja">日本語 (Japanese)</option>
+                <option value="ko">한국어 (Korean)</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <section id="home-screen" class="screen active">
+            <h2 data-i18n="welcomeMsg">Welcome! What would you like to practice?</h2>
+            <div class="menu-grid">
+                <button class="menu-card" onclick="startMouseGame()">
+                    <span class="icon">🖱️</span>
+                    <span data-i18n="m1">1. Single Click</span>
+                </button>
+                <button class="menu-card" onclick="startDoubleClickGame()">
+                    <span class="icon">📦</span>
+                    <span data-i18n="m2">2. Double Click</span>
+                </button>
+                <button class="menu-card" onclick="startRightClickGame()">
+                    <span class="icon">🖱️⚡</span>
+                    <span data-i18n="m3">3. Right Click</span>
+                </button>
+                <button class="menu-card" onclick="startHoverGame()">
+                    <span class="icon">🎈</span>
+                    <span data-i18n="m7">4. Hover Practice</span>
+                </button>
+                <button class="menu-card" onclick="startDragGame()">
+                    <span class="icon">🖐️</span>
+                    <span data-i18n="m4">5. Drag & Drop</span>
+                </button>
+                <button class="menu-card" onclick="startScrollGame()">
+                    <span class="icon">📜</span>
+                    <span data-i18n="m8">6. Page Scrolling</span>
+                </button>
+                <button class="menu-card" onclick="startResizeGame()">
+                    <span class="icon">📐</span>
+                    <span data-i18n="m9">7. Window Resize</span>
+                </button>
+                <button class="menu-card" onclick="startTabGame()">
+                    <span class="icon">↹</span>
+                    <span data-i18n="m10">8. Tab Navigation</span>
+                </button>
+                <button class="menu-card" onclick="startKeyboardGame()">
+                    <span class="icon">⌨️</span>
+                    <span data-i18n="m5">9. Shortcuts</span>
+                </button>
+                <button class="menu-card" onclick="startTypingGame()">
+                    <span class="icon">📝</span>
+                    <span data-i18n="m6">10. Typing & Size</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="game-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="clickInstr">Click the big blue targets as they appear!</p>
+                <div class="score-board"><span data-i18n="targetsLeft">Targets Remaining</span>: <span
+                        id="targets-left">5</span></div>
+            </div>
+            <div id="play-area"></div>
+        </section>
+
+        <section id="double-click-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="dblInstr">Quickly double-click the treasure chest to open it!</p>
+                <div class="score-board"><span data-i18n="chestsLeft">Chests Remaining</span>: <span
+                        id="chests-left">3</span></div>
+            </div>
+            <div class="chest-container">
+                <div id="chest" onclick="handleChestClick()" ondblclick="openChest()">🎁</div>
+                <p id="chest-hint" class="hint-text" data-i18n="dblHint">Double-click quickly!</p>
+            </div>
+        </section>
+
+        <section id="right-click-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="rightInstr">Right-click the secret box below!</p>
+                <div class="score-board"><span data-i18n="rightsLeft">Discoveries Left</span>: <span
+                        id="right-clicks-left">3</span></div>
+            </div>
+            <div class="secret-box-area">
+                <div id="secret-box" oncontextmenu="handleRightClick(event)" data-i18n="rightBox">🔍 Right-Click Me
+                </div>
+                <p id="right-click-msg" class="hint-text" data-i18n="rightHint">Use the secondary button on your mouse!
+                </p>
+            </div>
+        </section>
+
+        <section id="hover-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="hoverInstr">Move your mouse cursor over the balloons without clicking to pop them!</p>
+                <div class="score-board"><span data-i18n="balloonsLeft">Balloons Remaining</span>: <span
+                        id="balloons-left">5</span></div>
+            </div>
+            <div id="hover-area"></div>
+        </section>
+
+        <section id="drag-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="dragInstr">Click and drag the items into the Recycling Bin!</p>
+                <div class="score-board"><span data-i18n="itemsLeft">Items Left</span>: <span id="items-left">3</span>
+                </div>
+            </div>
+            <div class="drag-play-area">
+                <div id="draggable-items">
+                    <div class="drag-item" draggable="true" ondragstart="drag(event)" id="item1">📄</div>
+                    <div class="drag-item" draggable="true" ondragstart="drag(event)" id="item2">📦</div>
+                    <div class="drag-item" draggable="true" ondragstart="drag(event)" id="item3">🗞️</div>
+                </div>
+                <div id="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    🗑️
+                    <span data-i18n="recycleBin">Recycling Bin</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="scroll-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="scrollInstr">Use your mouse wheel or trackpad to scroll all the way down to find the fish!
+                </p>
+            </div>
+            <div class="scroll-container">
+                <div class="sea-surface">⛵ <span data-i18n="seaSurface">Top of Ocean</span></div>
+                <div class="sea-depths">
+                    <p>⬇️ <span data-i18n="keepScrolling">Keep Scrolling Down</span> ⬇️</p>
+                    <div id="submarine" onclick="findSubmarine()">🐠</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resize-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="resizeInstr">Click and drag the bottom-right handle of the window box to expand it!</p>
+            </div>
+            <div class="resizable-box" id="resizable-box">
+                <span data-i18n="resizeText">Drag my corner to make me bigger!</span>
+            </div>
+        </section>
+
+        <section id="tab-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="tabInstr">Press the 'Tab' key on your keyboard to jump between fields, then press 'Enter'
+                    on Submit!</p>
+            </div>
+            <div class="tab-form-container">
+                <input type="text" id="tab-input-1" placeholder="Field 1 (Press Tab)" class="tab-field">
+                <input type="text" id="tab-input-2" placeholder="Field 2 (Press Tab)" class="tab-field">
+                <button id="tab-submit-btn" class="action-btn" onclick="submitTabForm()" data-i18n="submitBtn">Submit
+                    with Enter</button>
+            </div>
+        </section>
+
+        <section id="keyboard-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="keyInstr">Hold down the requested shortcut key combination!</p>
+                <div class="score-board"><span data-i18n="keysLeft">Tasks Remaining</span>: <span
+                        id="keys-left">3</span></div>
+            </div>
+            <div class="keyboard-challenge-box">
+                <div id="target-shortcut-display" class="key-prompt">Ctrl + C</div>
+                <p id="action-description" class="action-text">Action: Copy</p>
+                <div id="keyboard-feedback" class="feedback-msg" data-i18n="keyPressMsg">Press the keys!</div>
+            </div>
+        </section>
+
+        <section id="typing-screen" class="screen">
+            <div class="game-info">
+                <p data-i18n="typingInstr">Type the phrase exactly as shown below!</p>
+            </div>
+            <div class="typing-container">
+                <div class="font-controls">
+                    <label data-i18n="textSizeLbl">Text Size:</label>
+                    <button onclick="changeFontSize(20)">Standard</button>
+                    <button onclick="changeFontSize(28)">Large</button>
+                    <button onclick="changeFontSize(36)">Extra Large</button>
+                </div>
+                <div id="prompt-text" class="phrase-display">...</div>
+                <input type="text" id="typing-input" class="large-input" placeholder="Type here..."
+                    oninput="checkTyping()">
+                <p id="typing-feedback" class="hint-text" data-i18n="typingStart">Start typing above...</p>
+                <button class="next-phrase-btn" onclick="loadNextPhrase()" data-i18n="skipBtn">Skip / Next Phrase
+                    ➔</button>
+            </div>
+        </section>
+
+        <section id="victory-screen" class="screen">
+            <div class="celebration">
+                <h2>🎉 <span data-i18n="greatJob">Great Job!</span></h2>
+                <p id="victory-message" data-i18n="victoryMsg">You completed the exercise!</p>
+                <button class="action-btn" onclick="showScreen('home-screen')" data-i18n="backHome">Back to Main
+                    Menu</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
